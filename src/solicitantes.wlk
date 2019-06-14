@@ -2,6 +2,7 @@ import profesionales.*
 import empresas.*
 
 
+
 class Persona {
 
 	var property pciaEnQueVive

@@ -41,6 +41,7 @@ describe "test de Etapa 1" {
 	test"profesional mas barato" {
 		assert.equals(juana, empre.profesionalMasBarato())
 	}
+	
 
 	test"profesional Vinculdo" {
 		assert.equals(juana.universidad(), rosario)

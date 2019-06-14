@@ -1,6 +1,7 @@
 
 class Profesional {    //clase agregada por mi
 
+
 	method provinciasDondePuedeTrabajar()
 
 	method honorariosPorHora()

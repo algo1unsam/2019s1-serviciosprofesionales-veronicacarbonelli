@@ -4,6 +4,7 @@ import solicitantes.*
 class Empresa {
 
 	var profesionales = []
+	
 	var property honorarioReferencia = 2
 
 	method contratarProfesional(profesional) {
