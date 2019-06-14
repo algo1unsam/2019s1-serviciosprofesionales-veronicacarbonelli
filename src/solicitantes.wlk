@@ -1,12 +1,13 @@
 import profesionales.*
 import empresas.*
 
+
 class Persona {
 
 	var property pciaEnQueVive
 
 	method puedeSerAtendida(profesional) {
-		return profesional.provinciasDondePuedeTrabajar() == pciaEnQueVive
+		return profesional.provinciasDondePuedeTrabajar().contains(pciaEnQueVive)
 	}
 
 }

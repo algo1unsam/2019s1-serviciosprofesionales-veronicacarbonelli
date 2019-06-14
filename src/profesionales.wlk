@@ -1,5 +1,5 @@
-// esta clase está completa, no necesita nada más
-class Profesional {
+
+class Profesional {    //clase agregada por mi
 
 	method provinciasDondePuedeTrabajar()
 
@@ -10,7 +10,7 @@ class Profesional {
 	}
 
 }
-
+// esta clase está completa, no necesita nada más
 class ProfesionalAsociado inherits Profesional {
 
 	var property universidad
@@ -37,6 +37,8 @@ class ProfesionalVinculado inherits Profesional {
 	override method honorariosPorHora() {
 		return universidad.honorariosPorHoraRecomendado()
 	}
+	
+	
 
 }
 
@@ -61,6 +63,8 @@ class Universidad {
 
 	var property provincia = null
 	var property honorariosPorHoraRecomendado = null
-
+	
+	
+	
 }
 
