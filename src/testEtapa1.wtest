@@ -1,0 +1,78 @@
+import profesionales.*
+import empresas.*
+import solicitantes.*
+
+describe "test de Etapa 1" {
+
+	// universidades
+	var sanMartin = new Universidad(provincia = "bsAs", honorariosPorHoraRecomendado = 3500)
+	var rosario = new Universidad(provincia = "SantaFe", honorariosPorHoraRecomendado = 2800)
+	var corrientes = new Universidad(provincia = "corrientes", honorariosPorHoraRecomendado = 4200)
+	var hurlingham = new Universidad(provincia = "bsAs", honorariosPorHoraRecomendado = 8800)
+	// profesionales
+	var juana = new ProfesionalVinculado(universidad = rosario)
+	var melina = new ProfesionalAsociado(universidad = corrientes)
+	var rocio = new ProfesionalLibre(universidad = hurlingham, provincias = [ "SantaFe", "cordoba", "bsAs" ], honorarios = 5000)
+	var luciana = new ProfesionalLibre(universidad = rosario, provincias = [ "SantaFe", "eRios" ], honorarios = 3200)
+	// empresa
+	var empre = new Empresa(profesionales = [], honorarioReferencia = 3500)
+	// personas
+	var simon = new Persona(pciaEnQueVive = "eRios")
+	// Instituciones
+	var crecer = new Institucion(universidadesQueReconoce = [ hurlingham ])
+
+	fixture {
+		empre.contratarProfesional(juana)
+		empre.contratarProfesional(melina)
+		empre.contratarProfesional(rocio)
+		empre.contratarProfesional(luciana)
+	}
+
+	test"Dos profesionales estudiaron en Rosario, uno en hurligham, cero en san martin" {
+		assert.equals(empre.estudiaronEn(rosario), 2)
+		assert.equals(empre.estudiaronEn(hurlingham), 1)
+		assert.equals(empre.estudiaronEn(sanMartin), 0)
+	}
+
+	test"profesionales caros" {
+		assert.equals([ rocio ], empre.profesionalesCaros())
+	}
+
+	test"profesional mas barato" {
+		assert.equals(juana, empre.profesionalMasBarato())
+	}
+
+	test"profesional Vinculdo" {
+		assert.equals(juana.universidad(), rosario)
+	}
+
+	test"universidades formadoras" {
+		assert.equals(#{ rosario, corrientes, hurlingham }, empre.universidadesFormadoras())
+	}
+
+	test" gente acotada" {
+		assert.equals(3, empre.genteAcotada().size())
+	}
+
+	// test etapa 2
+	test"persona puede ser atendido por un profesional que puede trabajar en la provincia que vive la persona" {
+		assert.equals(simon.puedeSerAtendida(luciana))
+	}
+
+	test"Institucion por profesionales que estudiaron en universidades que reconoce" {
+		assert.that(crecer.puedeSerAtendida(rocio))
+//	   	   assert.equals(2,#{1, 2}.intersection(#{5, 2}))
+	}
+	
+	test"Institucion por profesionales que estudiaron en universidades que redvsxvsconoce" {
+		assert.that(empre.puedeSatisfacer(crecer))
+//	   	   assert.equals(2,#{1, 2}.intersection(#{5, 2}))
+	}
+
+	test"Empresa no puede satisfacer a solicitante" {
+		assert.notThat(empre.puedeSatisfacer(simon))
+	// assert.that(empre.puedeSatisfacer(crecer))
+	}
+
+}
+
