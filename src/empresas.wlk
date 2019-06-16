@@ -4,8 +4,37 @@ import solicitantes.*
 class Empresa {
 
 	var profesionales = []
+	var registroDeTrabajo = []
+	var clientes = []
 	
 	var property honorarioReferencia = 2
+	
+	method darServicio(solicitante, profesional){
+		registroDeTrabajo.add(solicitante)
+		if(solicitante.puedeSerAtendida(profesional)){
+			profesional.honorariosPorHora()
+			clientes.add(solicitante)
+		}
+		else{
+			self.error("El cliente no puede ingresar al listado")
+		}
+		
+	
+	}
+	method registroDeTrabajo(){
+		return registroDeTrabajo
+	}
+	
+	method empresaCuantosClientesTiene(){
+		return clientes.size()
+	}
+	
+	method tenesDeClienteA(solicitante){
+		return clientes.contains(solicitante)
+	}
+	
+
+	
 
 	method contratarProfesional(profesional) {
 		profesionales.add(profesional)

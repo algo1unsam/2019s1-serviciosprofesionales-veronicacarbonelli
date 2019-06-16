@@ -5,19 +5,23 @@ import solicitantes.*
 describe "test de Etapa 1" {
 
 	// universidades
-	var sanMartin = new Universidad(provincia = "bsAs", honorariosPorHoraRecomendado = 3500)
-	var rosario = new Universidad(provincia = "SantaFe", honorariosPorHoraRecomendado = 2800)
-	var corrientes = new Universidad(provincia = "corrientes", honorariosPorHoraRecomendado = 4200)
-	var hurlingham = new Universidad(provincia = "bsAs", honorariosPorHoraRecomendado = 8800)
+	var sanMartin = new Universidad(provincia = "bsAs", honorariosPorHoraRecomendado = 3500, importe = 0)
+	var rosario = new Universidad(provincia = "SantaFe", honorariosPorHoraRecomendado = 2800, importe = 0)
+	var corrientes = new Universidad(provincia = "corrientes", honorariosPorHoraRecomendado = 4200, importe = 0)
+	var hurlingham = new Universidad(provincia = "bsAs", honorariosPorHoraRecomendado = 8800, importe = 0)
 	// profesionales
 	var juana = new ProfesionalVinculado(universidad = rosario)
 	var melina = new ProfesionalAsociado(universidad = corrientes)
-	var rocio = new ProfesionalLibre(universidad = hurlingham, provincias = [ "SantaFe", "cordoba", "bsAs" ], honorarios = 5000)
-	var luciana = new ProfesionalLibre(universidad = rosario, provincias = [ "SantaFe", "eRios" ], honorarios = 3200)
+	var rocio = new ProfesionalLibre(universidad = hurlingham, provincias = [ "SantaFe", "cordoba", "bsAs" ], honorarios = 5000, dinero=0)
+	var luciana = new ProfesionalLibre(universidad = rosario, provincias = [ "SantaFe", "eRios" ], honorarios = 3200, dinero=0)
+	var dieguito = new ProfesionalVinculado(universidad = sanMartin)
+	var jjr = new ProfesionalLibre(universidad = hurlingham,provincias = [ "SantaFe", "cordoba", "bsAs" ], honorarios = 4000, dinero=0 )
 	// empresa
-	var empre = new Empresa(profesionales = [], honorarioReferencia = 3500)
+	var empre = new Empresa(profesionales = [], honorarioReferencia = 3500, registroDeTrabajo = [], clientes = [])
+	var havanna = new Empresa(profesionales = [], honorarioReferencia = 2500, registroDeTrabajo = [], clientes = [])
 	// personas
 	var simon = new Persona(pciaEnQueVive = "eRios")
+	var mirna = new Persona(pciaEnQueVive = "bsAs")
 	// Instituciones
 	var crecer = new Institucion(universidadesQueReconoce = [ hurlingham ])
 
@@ -26,12 +30,15 @@ describe "test de Etapa 1" {
 		empre.contratarProfesional(melina)
 		empre.contratarProfesional(rocio)
 		empre.contratarProfesional(luciana)
+		empre.contratarProfesional(dieguito)
+		havanna.contratarProfesional(jjr)
+		havanna.contratarProfesional(juana)
 	}
 
 	test"Dos profesionales estudiaron en Rosario, uno en hurligham, cero en san martin" {
 		assert.equals(empre.estudiaronEn(rosario), 2)
 		assert.equals(empre.estudiaronEn(hurlingham), 1)
-		assert.equals(empre.estudiaronEn(sanMartin), 0)
+		assert.equals(empre.estudiaronEn(sanMartin), 1)
 	}
 
 	test"profesionales caros" {
@@ -48,7 +55,7 @@ describe "test de Etapa 1" {
 	}
 
 	test"universidades formadoras" {
-		assert.equals(#{ rosario, corrientes, hurlingham }, empre.universidadesFormadoras())
+		assert.equals(#{ rosario, corrientes, hurlingham, sanMartin }, empre.universidadesFormadoras())
 	}
 
 	test" gente acotada" {
@@ -73,6 +80,37 @@ describe "test de Etapa 1" {
 	test"Empresa puede satisfacer a solicitante" {
 		//assert.notThat(empre.puedeSatisfacer(simon))
 	 assert.that(empre.puedeSatisfacer(crecer))
+	}
+	
+	//test etapa 3
+	test"Donacion vinculados"{
+		dieguito.cobrarImporte(100)
+		assert.equals(50, sanMartin.importe())
+	}
+	
+	test"Donacion Asociados al Litoral"{
+		jjr.cobrarImporte(100)
+		asociacionProfesionalesDelLitoral.donaciones(100)
+		assert.equals(100, asociacionProfesionalesDelLitoral.caja())
+	}
+	test"Donacion Profesionales Libres"{
+		rocio.cobrarImporte(100)
+		luciana.cobrarImporte(50)
+		assert.equals(100, rocio.dinero())
+		rocio.pasarUnaCantidad(luciana, 50)
+		assert.equals(50,rocio.dinero())
+		assert.equals(100, luciana.dinero())
+	}
+	
+	test"Test Empresa puede dar servicio a  un solicitantes"{
+		havanna.darServicio(mirna, jjr)
+		//assert.equals(1, havanna.registroDeTrabajo())
+	    assert.equals(4000, jjr.honorariosPorHora())
+		
+		
+	}
+	test"Empresa no puede dar servicio"{
+   		assert.throwsException({havanna.darServicio(mirna, juana)})
 	}
 
 }

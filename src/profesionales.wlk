@@ -9,7 +9,7 @@ class Profesional {    //clase agregada por mi
 	method cantidadDeProvinciasDondePuedeTrabajar() {
 		return self.provinciasDondePuedeTrabajar().size()
 	}
-
+	
 }
 // esta clase está completa, no necesita nada más
 class ProfesionalAsociado inherits Profesional {
@@ -23,6 +23,11 @@ class ProfesionalAsociado inherits Profesional {
 	override method honorariosPorHora() {
 		return 3000 // //
 	}
+	
+	method cobrarImporte(unValor){
+	 asociacionProfesionalesDelLitoral.donaciones(unValor)
+	}
+	
 
 }
 
@@ -38,6 +43,10 @@ class ProfesionalVinculado inherits Profesional {
 	override method honorariosPorHora() {
 		return universidad.honorariosPorHoraRecomendado()
 	}
+	method cobrarImporte(unValor){
+		return universidad.donacion(unValor/2)
+	}
+	
 	
 	
 
@@ -49,6 +58,24 @@ class ProfesionalLibre inherits Profesional {
 	var property universidad
 	var honorarios
 	var provincias = []
+	var property dinero 
+	
+	
+	
+	
+	
+	method cobrarImporte(unValor){
+		dinero+= unValor
+		
+	}
+	
+	method pasarUnaCantidad(profesional, cuanto){
+	
+		profesional.cobrarImporte(cuanto)
+		dinero-=cuanto
+	}
+	
+	
 
 	override method honorariosPorHora() {
 		return honorarios
@@ -64,8 +91,22 @@ class Universidad {
 
 	var property provincia = null
 	var property honorariosPorHoraRecomendado = null
+	var property importe
 	
-	
+	method donacion(donacion){
+	importe=+ donacion
+	}
 	
 }
+
+object asociacionProfesionalesDelLitoral{
+	
+	var property caja
+	
+	method donaciones(donacion){
+	caja=+ donacion 
+}
+
+}
+
 
